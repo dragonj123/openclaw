@@ -1,0 +1,5 @@
+{
+  "id": "voice-agent-advisor",
+  "name": "Voice Agent Advisor",
+  "description": "Advisor sandbox platform — routes text agent tools to FastAPI running inside sandbox containers"
+}
