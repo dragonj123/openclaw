@@ -485,6 +485,26 @@ export function createCommandHandlers(context: CommandHandlerContext) {
           chatLog.addSystem(`reset failed: ${sanitizeRenderableText(String(err))}`);
         }
         break;
+      case "call": {
+        const message = args || "Hello, this is OpenClaw calling.";
+        chatLog.addSystem(`Triggering voice call: "${message.slice(0, 80)}..."`);
+        try {
+          const res = await fetch("http://localhost:3456/call", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message }),
+          });
+          const data = await res.json();
+          if (data.ok) {
+            chatLog.addSystem(`Call initiated (room: ${data.room})`);
+          } else {
+            chatLog.addSystem(`Call failed: ${data.error || "unknown error"}`);
+          }
+        } catch (err) {
+          chatLog.addSystem(`Voice bridge unreachable: ${String(err)}`);
+        }
+        break;
+      }
       case "abort":
         await abortActive();
         break;
